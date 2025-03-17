@@ -6,7 +6,7 @@
 
 .section .text
     .global main
-    .extern printf, scanf  
+    .extern printf, scanf   # Import bibliotek z C
 
 main:
     pushl %ebp
@@ -22,14 +22,14 @@ main:
     movl %eax, %ebx        
 
     imull %eax, %eax       # n * n
-    jo overflow_error      # Jeśli overflow, skaczemy do error handlingu
+    jo overflow_error      # Jeśli overflow skaczemy do error handlingu
     movl %eax, %ecx        
 
     movl %ebx, %edx        
     imull %eax, %edx       # n^2 * n
     jo overflow_error      
     
-    imull $3, %ecx         # 3 * n^2
+    imull $3, %ecx         # 3*n^2
     jo overflow_error      
     addl %ecx, %edx        # n^3 + 3n^2
     jo overflow_error      
@@ -55,4 +55,6 @@ overflow_error:
     movl $1, %eax          # Zwracamy kod błędu 1
     leave
     ret
-
+# Sposoby zapobiegania przepełnieniu
+# 1. Ograniczenie n do wartości < 10000 (żeby wynik nie przekroczył int_max)
+# 2. weryfikacja zakresu wartości przed każdą operacją matematyczną lub użycie 64 - bitowych rejestrów
